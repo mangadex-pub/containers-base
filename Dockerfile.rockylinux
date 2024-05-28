@@ -1,0 +1,41 @@
+ARG UPSTREAM_VERSION="9"
+FROM docker.io/library/rockylinux:${UPSTREAM_VERSION} as upstream
+
+ENV MD_LINUX_DISTRIBUTION_TYPE="RPM"
+ENV MD_LINUX_DISTRIBUTION_NAME="Rocky Linux"
+
+ARG UPSTREAM_VERSION="9"
+ENV MD_LINUX_DISTRIBUTION_VER=${UPSTREAM_VERSION}
+
+FROM upstream
+
+ENV LANG="C.UTF-8"
+ENV TZ="UTC"
+
+RUN echo "install_weak_deps=false" | tee -a /etc/dnf/dnf.conf
+
+RUN dnf update -y && \
+    dnf install -y 'dnf-command(config-manager)' && \
+    dnf install -y epel-release && \
+    dnf update -y && \
+    dnf swap -y curl-minimal curl && \
+    dnf install -y \
+      bind-utils \
+      fontconfig \
+      iputils \
+      gzip \
+      shadow-utils \
+      tar \
+      util-linux \
+      wget \
+      which && \
+    dnf clean all && \
+    rm -rf \
+      /tmp/* \
+      /var/cache \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /var/tmp/*
+
+RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
+USER mangadex
