@@ -50,8 +50,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: "{context}/Dockerfile.${{ inputs.MD_LINUX_FLAVOUR }}"
+          context: "."
+          file: "./Dockerfile.${{ inputs.MD_LINUX_FLAVOUR }}"
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
           provenance: false
