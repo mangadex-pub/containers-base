@@ -1,0 +1,41 @@
+ARG UPSTREAM_VERSION="bookworm"
+FROM docker.io/library/debian:${UPSTREAM_VERSION}-slim as upstream
+
+ENV MD_LINUX_DISTRIBUTION_TYPE="DEB"
+ENV MD_LINUX_DISTRIBUTION_NAME="Debian"
+
+ARG UPSTREAM_VERSION="bookworm"
+ENV MD_LINUX_DISTRIBUTION_VER=${UPSTREAM_VERSION}
+
+FROM upstream
+
+ENV LANG="C.UTF-8"
+ENV TZ="UTC"
+
+ENV DEBIAN_FRONTEND "noninteractive"
+RUN mkdir -pv /etc/apt/apt.conf.d && touch /etc/apt/apt.conf.d/99containers
+RUN echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/99containers
+RUN echo 'Dpkg::Progress-Fancy "0";'      >> /etc/apt/apt.conf.d/99containers
+
+RUN apt -qq update && \
+    apt -qq -y full-upgrade && \
+    apt -qq -y --no-install-recommends install \
+      apt-utils \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      debian-archive-keyring \
+      gnupg2 && \
+    apt -qq update && \
+    apt -qq -y full-upgrade && \
+    apt -qq -y --purge autoremove && \
+    apt -qq -y clean && \
+    rm -rf \
+      /tmp/* \
+      /var/cache \
+      /var/lib/apt/lists/* \
+      /var/log/* \
+      /var/tmp/*
+
+RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
+USER mangadex
