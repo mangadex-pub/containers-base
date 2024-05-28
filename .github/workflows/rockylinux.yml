@@ -1,0 +1,22 @@
+on:
+  push:
+    branches: [ "*" ]
+    tags: [ "*" ]
+  schedule:
+    - cron: "0 10 * * 1"
+
+env:
+  REGISTRY: "ghcr.io"
+  IMAGE_NAME: "${{ github.repository }}"
+
+jobs:
+  rockylinux:
+    strategy:
+      matrix:
+        ROCKY_VERSION: [ "9" ]
+
+    uses: "./.github/workflows/common.yml"
+    secrets: "inherit" # for Docker image publication
+    with:
+      MD_LINUX_FLAVOUR: "rockylinux"
+      MD_LINUX_UPSTREAM_VERSION: "${{ matrix.ROCKY_VERSION }}"
