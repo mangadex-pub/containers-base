@@ -42,7 +42,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.IMAGE_NAME }}/${{ inputs.MD_LINUX_FLAVOUR }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ inputs.MD_LINUX_FLAVOUR }}
           tags: |
             type=sha,event=push,enable=true,prefix=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-git-,format=short
             type=raw,event=push,enable={{ is_default_branch }},value=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}
