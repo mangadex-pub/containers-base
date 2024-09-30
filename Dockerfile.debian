@@ -25,7 +25,8 @@ RUN apt -qq update && \
       ca-certificates \
       curl \
       debian-archive-keyring \
-      gnupg2 && \
+      gnupg2 \
+      vim && \
     apt -qq update && \
     apt -qq -y full-upgrade && \
     apt -qq -y --purge autoremove && \

@@ -28,6 +28,7 @@ RUN dnf update -y && \
       shadow-utils \
       tar \
       util-linux \
+      vim \
       wget \
       which && \
     dnf clean all && \
