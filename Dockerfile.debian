@@ -1,18 +1,18 @@
 ARG UPSTREAM_VERSION="bookworm"
-FROM docker.io/library/debian:${UPSTREAM_VERSION}-slim as upstream
+FROM docker.io/library/debian:${UPSTREAM_VERSION}-slim AS upstream
 
 ENV MD_LINUX_DISTRIBUTION_TYPE="DEB"
 ENV MD_LINUX_DISTRIBUTION_NAME="Debian"
 
 ARG UPSTREAM_VERSION="bookworm"
-ENV MD_LINUX_DISTRIBUTION_VER=${UPSTREAM_VERSION}
+ENV MD_LINUX_DISTRIBUTION_VER="${UPSTREAM_VERSION}"
 
 FROM upstream
 
 ENV LANG="C.UTF-8"
 ENV TZ="UTC"
 
-ENV DEBIAN_FRONTEND "noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive"
 RUN mkdir -pv /etc/apt/apt.conf.d && touch /etc/apt/apt.conf.d/99containers
 RUN echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/99containers
 RUN echo 'Dpkg::Progress-Fancy "0";'      >> /etc/apt/apt.conf.d/99containers
