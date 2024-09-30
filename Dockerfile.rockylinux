@@ -16,6 +16,8 @@ RUN echo "install_weak_deps=false" | tee -a /etc/dnf/dnf.conf
 
 RUN dnf update -y && \
     dnf install -y 'dnf-command(config-manager)' && \
+    crb enable && \
+    dnf update && \
     dnf install -y epel-release && \
     dnf update -y && \
     dnf swap -y curl-minimal curl && \
