@@ -37,7 +37,8 @@ RUN dnf update -y && \
       /var/cache \
       /var/lib/apt/lists/* \
       /var/log/* \
-      /var/tmp/*
+      /var/tmp/* && \
+    dnf --version
 
 RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
 USER mangadex
