@@ -42,7 +42,7 @@ RUN dnf update -y && \
 RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
 USER mangadex
 
-FROM standard AS devel
+FROM standard AS development
 
 RUN dnf -y update && \
     dnf -y group install 'Development Tools' && \

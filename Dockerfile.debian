@@ -42,7 +42,7 @@ RUN apt -qq update && \
 RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
 USER mangadex
 
-FROM standard AS devel
+FROM standard AS development
 
 RUN apt -qq update && \
     apt -qq -y full-upgrade && \

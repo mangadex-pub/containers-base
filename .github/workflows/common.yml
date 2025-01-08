@@ -20,8 +20,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - { VERSION_SUFFIX: "", DOCKERFILE_TARGET: "standard" }
-          - { VERSION_SUFFIX: "-devel", DOCKERFILE_TARGET: "develop" }
+          - { DOCKERFILE_TARGET: "standard", VERSION_SUFFIX: "" }
+          - { DOCKERFILE_TARGET: "development", VERSION_SUFFIX: "-devel" }
 
     runs-on: ubuntu-latest
     permissions:
