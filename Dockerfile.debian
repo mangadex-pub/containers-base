@@ -44,6 +44,7 @@ USER mangadex
 
 FROM standard AS development
 
+USER root
 RUN apt -qq update && \
     apt -qq -y full-upgrade && \
     apt -qq -y --no-install-recommends install \
@@ -58,3 +59,5 @@ RUN apt -qq update && \
       /var/log/* \
       /var/tmp/* && \
     apt --version
+
+USER mangadex

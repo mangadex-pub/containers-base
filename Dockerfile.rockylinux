@@ -7,7 +7,7 @@ ENV MD_LINUX_DISTRIBUTION_NAME="Rocky Linux"
 ARG UPSTREAM_VERSION="9"
 ENV MD_LINUX_DISTRIBUTION_VER="${UPSTREAM_VERSION}"
 
-FROM upstream as standard
+FROM upstream AS standard
 
 ENV LANG="C.UTF-8"
 ENV TZ="UTC"
@@ -44,6 +44,7 @@ USER mangadex
 
 FROM standard AS development
 
+USER root
 RUN dnf -y update && \
     dnf -y group install 'Development Tools' && \
     dnf -y install \
@@ -56,3 +57,5 @@ RUN dnf -y update && \
       /var/log/* \
       /var/tmp/* && \
     dnf --version
+
+USER mangadex
