@@ -17,6 +17,12 @@ env:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        include:
+          - { VERSION_SUFFIX: "", DOCKERFILE_TARGET: "standard" }
+          - { VERSION_SUFFIX: "-devel", DOCKERFILE_TARGET: "develop" }
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,8 +41,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.DOCKER_LAYER_CACHE }}
-          key: ${{ runner.os }}-buildx-${{ inputs.MD_LINUX_FLAVOUR }}-${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ inputs.MD_LINUX_FLAVOUR }}-${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-${{ matrix.DOCKERFILE_TARGET }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-buildx-${{ inputs.MD_LINUX_FLAVOUR }}-${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-${{ matrix.DOCKERFILE_TARGET }}-
             ${{ runner.os }}-buildx-${{ inputs.MD_LINUX_FLAVOUR }}-${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-
 
       - name: Log in to the Container registry
@@ -52,14 +59,15 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ inputs.MD_LINUX_FLAVOUR }}
           tags: |
-            type=sha,event=push,enable=true,prefix=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}-git-,format=short
-            type=raw,event=push,enable={{ is_default_branch }},value=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}
+            type=sha,event=push,enable=true,prefix=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}${{ matrix.VERSION_SUFFIX }}-git-,format=short
+            type=raw,event=push,enable={{ is_default_branch }},value=${{ inputs.MD_LINUX_UPSTREAM_VERSION }}${{ matrix.VERSION_SUFFIX }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: "."
           file: "./Dockerfile.${{ inputs.MD_LINUX_FLAVOUR }}"
+          target: ${{ matrix.DOCKERFILE_TARGET }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64/v8
           provenance: false

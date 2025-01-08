@@ -7,7 +7,7 @@ ENV MD_LINUX_DISTRIBUTION_NAME="Rocky Linux"
 ARG UPSTREAM_VERSION="9"
 ENV MD_LINUX_DISTRIBUTION_VER="${UPSTREAM_VERSION}"
 
-FROM upstream
+FROM upstream as standard
 
 ENV LANG="C.UTF-8"
 ENV TZ="UTC"
@@ -35,10 +35,24 @@ RUN dnf update -y && \
     rm -rf \
       /tmp/* \
       /var/cache \
-      /var/lib/apt/lists/* \
       /var/log/* \
       /var/tmp/* && \
     dnf --version
 
 RUN groupadd -r -g 9999 mangadex && useradd -m -u 9999 -g 9999 mangadex
 USER mangadex
+
+FROM standard AS devel
+
+RUN dnf -y update && \
+    dnf -y group install 'Development Tools' && \
+    dnf -y install \
+      git \
+      zlib-static && \
+    dnf clean all && \
+    rm -rf \
+      /tmp/* \
+      /var/cache \
+      /var/log/* \
+      /var/tmp/* && \
+    dnf --version
