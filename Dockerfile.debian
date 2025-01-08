@@ -33,7 +33,6 @@ RUN apt -qq update && \
     apt -qq -y clean && \
     rm -rf \
       /tmp/* \
-      /var/cache \
       /var/lib/apt/lists/* \
       /var/log/* \
       /var/tmp/* && \
@@ -54,7 +53,6 @@ RUN apt -qq update && \
     apt -qq -y clean && \
     rm -rf \
       /tmp/* \
-      /var/cache \
       /var/lib/apt/lists/* \
       /var/log/* \
       /var/tmp/* && \
