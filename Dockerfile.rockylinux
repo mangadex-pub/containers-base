@@ -50,6 +50,11 @@ RUN dnf -y update && \
     dnf -y install \
       git \
       zlib-static && \
+    curl -fsSL https://rpm.nodesource.com/setup_lts.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    yum install -y nodejs && \
+    node -v && \
+    rm nodesource_setup.sh && \
     dnf clean all && \
     rm -rf \
       /tmp/* \

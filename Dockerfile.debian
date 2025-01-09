@@ -49,6 +49,11 @@ RUN apt -qq update && \
     apt -qq -y --no-install-recommends install \
       build-essential \
       git && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt -qq -y install nodejs && \
+    node -v && \
+    rm nodesource_setup.sh && \
     apt -qq -y --purge autoremove && \
     apt -qq -y clean && \
     rm -rf \
